@@ -1,20 +1,15 @@
 // SPDX-License-Identifier: Unlicenced
 
-////////////////////////////////////////////////////////////////////////////////////////
-// Liquidity Locker smart contract developed by Jeff Powell, 2022
-
-// This smart contract works for LP liquidity tokens on the Uniswap DEX, or any forks
-// such as PancakeSwap/Sushiswap/Etc.
-
-// The following contract offers peace of mind to Token investors, as the
-// Liquidity Pool Tokens and any deposited native coin (ETH/BNB/XDAI/Etc.) 
-// that will go to the members of the project team will be time-locked whereby 
-// neither The native coin, nor the LP tokens cannot be withdrawn
-// until the specifed date is reached.
-
-// Withdraw functions (LP tokens removed) can only be called when the current timestamp is 
-// greater than the time specified in each functions
-////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+//   Liquidity Locker smart contract developed by Jeff Powell, 2022
+//   --------------------------------------------------------------
+//   This smart contract works for LP liquidity tokens on the Uniswap DEX, or any other forks
+//   such as PancakeSwap/Sushiswap/Etc.
+//
+//   The following contract offers peace of mind to Token investors, as the
+//   Liquidity Pool Tokens that will go to the members of the project team will be 
+//   time-locked, whereby the LP tokens cannot be withdrawn until the specifed date is reached.
+////////////////////////////////////////////////////////////////////////////////////////////////
 
 pragma solidity ^0.8.10;
 
@@ -29,8 +24,10 @@ contract LPLock {
     LPToken public token;
 
     //////////////////////////////////////////////////////////////////////////////////
-    // contract address of the LP Token you wish to "lock"
+    ////////   contract address of the LP Token you wish to "lock"   /////////////////
+    
     address public tokenContractAddress = 0x97CffD2241ea4516b7BB9d2D7fa1e4d8b76aff76;
+    
     //////////////////////////////////////////////////////////////////////////////////
 
     address public thisContractAddress;
@@ -41,6 +38,7 @@ contract LPLock {
     // withdrawals can only be made after the time expressed as Unix epoch time
     // https://www.epochconverter.com/
     // Epoch value should be hardcoded to avoid any doubt
+    
       uint256 public unlockDate1 = 1641433200;
 //    uint256 public unlockDate2 = ;
 //    uint256 public unlockDate3 = ;
@@ -48,6 +46,7 @@ contract LPLock {
 
 
     // wallet addresses of project team members entitlted to claim
+    
       address public teamMemberWallet1 = 0x83a9DE0534Fa712075ecE38A6bb804A100b4c728;  
 //    address public teamMemberWallet2 = ;  
 //    address public teamMemberWallet3 = ;   
@@ -56,14 +55,12 @@ contract LPLock {
 
 
     // actual LP amounts to be withdrawn expressed as percentage of total LP tokens
+    
       uint256 public teamMember1Percentage = 100;
 //    uint256 public teamMember2Percentage = ;
 //    uint256 public teamMember3Percentage = ;
 //    uint256 public teamMember4Percentage = ;
 //    uint256 public teamMember5Percentage = ;
-
-    // store LP total value before dividing amongst team members
-    
 
 
     modifier onlyAdmin {
@@ -97,16 +94,19 @@ contract LPLock {
 
     // check the current time, expressed as Epoch time
     // https://www.epochconverter.com/
+    
     function currentEpochtime() public view returns(uint256) {
         return block.timestamp;
     }
 
     // check the Native coin balance (ETH/BNB/XDAI/Etc.) stored in THIS contract 
+    
     function thisContractBalanceNativeCoin() public view returns(uint) {
         return address(this).balance;
     }
     
     // check the LP token balance, stored in THIS contract  
+    
     function thisContractBalanceLPToken() public view returns(uint) {
         return token.balanceOf(address(this));
     }
@@ -144,6 +144,7 @@ contract LPLock {
 
     // admin can also withdraw any amount of native coin 
     // sometimes sent accidentally to the smart contract
+    
     function devWithdrawNativeCoin() onlyAdmin public {
         require (admin == msg.sender);
         require(mutex == false);
